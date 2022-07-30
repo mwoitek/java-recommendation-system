@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.apache.commons.csv.CSVRecord;
 import edu.duke.FileResource;
 
@@ -36,7 +37,7 @@ public class FirstRatings {
     return movies;
   }
 
-  public int countComedyMovies(ArrayList<Movie> movies) {
+  private int countComedyMovies(ArrayList<Movie> movies) {
     int count = 0;
     for (Movie movie : movies) {
       if (movie.getGenres().toLowerCase().contains("comedy")) {
@@ -46,7 +47,7 @@ public class FirstRatings {
     return count;
   }
 
-  public int countMoviesLongerThan150Min(ArrayList<Movie> movies) {
+  private int countMoviesLongerThan150Min(ArrayList<Movie> movies) {
     int count = 0;
     for (Movie movie : movies) {
       if (movie.getMinutes() > 150) {
@@ -54,6 +55,55 @@ public class FirstRatings {
       }
     }
     return count;
+  }
+
+  private HashMap<String, Integer> buildDirectorCountMap(ArrayList<Movie> movies) {
+    HashMap<String, Integer> directorCountMap = new HashMap<String, Integer>();
+    for (Movie movie : movies) {
+      for (String director : movie.getDirector().split(", ")) {
+        if (directorCountMap.containsKey(director)) {
+          directorCountMap.put(director, directorCountMap.get(director) + 1);
+        } else {
+          directorCountMap.put(director, 1);
+        }
+      }
+    }
+    return directorCountMap;
+  }
+
+  private Integer getMaximumNumberMovies(HashMap<String, Integer> directorCountMap) {
+    Integer maxNumMovies = -1;
+    Integer numMovies;
+    for (String director : directorCountMap.keySet()) {
+      numMovies = directorCountMap.get(director);
+      if (numMovies > maxNumMovies) {
+        maxNumMovies = numMovies;
+      }
+    }
+    return maxNumMovies;
+  }
+
+  private ArrayList<String> getDirectorsMaximumNumberMovies(
+      HashMap<String, Integer> directorCountMap, Integer maxNumMovies) {
+    ArrayList<String> directors = new ArrayList<String>();
+    for (String director : directorCountMap.keySet()) {
+      if (directorCountMap.get(director) == maxNumMovies) {
+        directors.add(director);
+      }
+    }
+    return directors;
+  }
+
+  private void printDirectorsInfo(ArrayList<Movie> movies) {
+    HashMap<String, Integer> directorCountMap = buildDirectorCountMap(movies);
+    Integer maxNumMovies = getMaximumNumberMovies(directorCountMap);
+    System.out.println("Maximum number of movies by any director: " + maxNumMovies);
+    ArrayList<String> directors =
+        getDirectorsMaximumNumberMovies(directorCountMap, maxNumMovies);
+    System.out.println("Directors that directed that many movies:");
+    for (String director : directors) {
+      System.out.println(director);
+    }
   }
 
   public void testLoadMovies() {
@@ -69,6 +119,7 @@ public class FirstRatings {
         .println("Movies that have 'Comedy' as a genre: " + countComedyMovies(movies));
     System.out.println("Movies that are longer than 150 minutes: "
         + countMoviesLongerThan150Min(movies));
+    printDirectorsInfo(movies);
     System.out.println();
 
     filename = "ratedmoviesfull.csv";
@@ -79,6 +130,7 @@ public class FirstRatings {
         .println("Movies that have 'Comedy' as a genre: " + countComedyMovies(movies));
     System.out.println("Movies that are longer than 150 minutes: "
         + countMoviesLongerThan150Min(movies));
+    printDirectorsInfo(movies);
   }
 
   public static void main(String[] args) {

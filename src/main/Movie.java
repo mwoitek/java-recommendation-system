@@ -64,7 +64,7 @@ public class Movie {
 
   public String toString() {
     String result = "Movie [id=" + id + ", title=" + title + ", year=" + year;
-    result += ", genres= " + genres + "]";
+    result += ", genres=" + genres + "]";
     return result;
   }
 
