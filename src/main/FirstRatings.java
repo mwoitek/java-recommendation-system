@@ -36,16 +36,49 @@ public class FirstRatings {
     return movies;
   }
 
+  public int countComedyMovies(ArrayList<Movie> movies) {
+    int count = 0;
+    for (Movie movie : movies) {
+      if (movie.getGenres().toLowerCase().contains("comedy")) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  public int countMoviesLongerThan150Min(ArrayList<Movie> movies) {
+    int count = 0;
+    for (Movie movie : movies) {
+      if (movie.getMinutes() > 150) {
+        count++;
+      }
+    }
+    return count;
+  }
+
   public void testLoadMovies() {
-    ArrayList<Movie> movies = loadMovies("ratedmovies_short.csv");
+    String filename = "ratedmovies_short.csv";
+    ArrayList<Movie> movies = loadMovies(filename);
+    System.out.println("filename = " + filename);
     System.out.println("Number of movies: " + movies.size());
     System.out.println("Movies:");
     for (Movie movie : movies) {
       System.out.println(movie);
     }
+    System.out
+        .println("Movies that have 'Comedy' as a genre: " + countComedyMovies(movies));
+    System.out.println("Movies that are longer than 150 minutes: "
+        + countMoviesLongerThan150Min(movies));
+    System.out.println();
 
-    movies = loadMovies("ratedmoviesfull.csv");
+    filename = "ratedmoviesfull.csv";
+    movies = loadMovies(filename);
+    System.out.println("filename = " + filename);
     System.out.println("Number of movies: " + movies.size());
+    System.out
+        .println("Movies that have 'Comedy' as a genre: " + countComedyMovies(movies));
+    System.out.println("Movies that are longer than 150 minutes: "
+        + countMoviesLongerThan150Min(movies));
   }
 
   public static void main(String[] args) {
