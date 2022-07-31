@@ -133,9 +133,55 @@ public class FirstRatings {
     printDirectorsInfo(movies);
   }
 
+  public ArrayList<Rater> loadRaters(String filename) {
+    ArrayList<Rater> raters = new ArrayList<Rater>();
+    FileResource fr = new FileResource("data/" + filename);
+
+    String prevRaterId = "";
+    String currRaterId;
+    String movieId;
+    double rating;
+    int idx = -1;
+    Rater rater;
+
+    for (CSVRecord record : fr.getCSVParser()) {
+      currRaterId = record.get("rater_id");
+      if (!currRaterId.equals(prevRaterId)) {
+        raters.add(new Rater(currRaterId));
+        idx++;
+      }
+      movieId = record.get("movie_id");
+      rating = Double.parseDouble(record.get("rating"));
+      rater = raters.get(idx);
+      rater.addRating(movieId, rating);
+      raters.set(idx, rater);
+      prevRaterId = currRaterId;
+    }
+
+    return raters;
+  }
+
+  public void testLoadRaters() {
+    String filename = "ratings_short.csv";
+    ArrayList<Rater> raters = loadRaters(filename);
+    System.out.println("filename = " + filename);
+    System.out.println("Number of raters: " + raters.size());
+    System.out.println("Raters:");
+    for (Rater rater : raters) {
+      System.out.println("ID: " + rater.getID() + ", # ratings: " + rater.numRatings());
+    }
+    System.out.println();
+
+    filename = "ratings.csv";
+    raters = loadRaters(filename);
+    System.out.println("filename = " + filename);
+    System.out.println("Number of raters: " + raters.size());
+  }
+
   public static void main(String[] args) {
     FirstRatings fr = new FirstRatings();
-    fr.testLoadMovies();
+    // fr.testLoadMovies();
+    fr.testLoadRaters();
   }
 
 }
