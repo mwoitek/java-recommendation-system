@@ -6,11 +6,11 @@ import java.util.Collections;
 public class MovieRunnerAverage {
 
   public void printAverageRatings() {
-    SecondRatings sr = new SecondRatings("ratedmovies_short.csv", "ratings_short.csv");
+    SecondRatings sr = new SecondRatings("ratedmoviesfull.csv", "ratings.csv");
     System.out.println("Number of movies: " + sr.getMovieSize());
     System.out.println("Number of raters: " + sr.getRaterSize());
 
-    int minimalRaters = 3;
+    int minimalRaters = 12;
     ArrayList<Rating> averageRatings = sr.getAverageRatings(minimalRaters);
     Collections.sort(averageRatings);
 
@@ -22,9 +22,9 @@ public class MovieRunnerAverage {
   }
 
   public void getAverageRatingOneMovie() {
-    SecondRatings sr = new SecondRatings("ratedmovies_short.csv", "ratings_short.csv");
+    SecondRatings sr = new SecondRatings("ratedmoviesfull.csv", "ratings.csv");
 
-    String movieTitle = "The Godfather";
+    String movieTitle = "Vacation";
     String movieId = sr.getID(movieTitle);
 
     ArrayList<Rating> averageRatings = sr.getAverageRatings(1);
