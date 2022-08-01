@@ -2,12 +2,12 @@ package main;
 
 import java.util.ArrayList;
 
-public class PlainRater implements Rater {
+public class EfficientRater implements Rater {
 
   private String myID;
   private ArrayList<Rating> myRatings;
 
-  public PlainRater(String id) {
+  public EfficientRater(String id) {
     myID = id;
     myRatings = new ArrayList<Rating>();
   }
