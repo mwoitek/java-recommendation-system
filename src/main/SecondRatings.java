@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class SecondRatings {
 
   private ArrayList<Movie> myMovies;
-  private ArrayList<PlainRater> myRaters;
+  private ArrayList<EfficientRater> myRaters;
 
   public SecondRatings(String moviefile, String ratingsfile) {
     FirstRatings fr = new FirstRatings();
@@ -29,7 +29,7 @@ public class SecondRatings {
     double sum = 0.0;
     int count = 0;
     double rating;
-    for (PlainRater rater : myRaters) {
+    for (EfficientRater rater : myRaters) {
       if ((rating = rater.getRating(id)) < 0.0) {
         continue;
       }

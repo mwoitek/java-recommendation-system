@@ -114,8 +114,8 @@ public class FirstRatings {
     System.out.println("Number of such directors: " + directors.size());
   }
 
-  public ArrayList<PlainRater> loadRaters(String filename) {
-    ArrayList<PlainRater> raters = new ArrayList<PlainRater>();
+  public ArrayList<EfficientRater> loadRaters(String filename) {
+    ArrayList<EfficientRater> raters = new ArrayList<EfficientRater>();
     FileResource fr = new FileResource("data/" + filename);
 
     String prevRaterId = "";
@@ -123,12 +123,12 @@ public class FirstRatings {
     String movieId;
     double rating;
     int idx = -1;
-    PlainRater rater;
+    EfficientRater rater;
 
     for (CSVRecord record : fr.getCSVParser()) {
       currRaterId = record.get("rater_id");
       if (!currRaterId.equals(prevRaterId)) {
-        raters.add(new PlainRater(currRaterId));
+        raters.add(new EfficientRater(currRaterId));
         idx++;
       }
       movieId = record.get("movie_id");
@@ -142,17 +142,18 @@ public class FirstRatings {
     return raters;
   }
 
-  private HashMap<String, Integer> buildRaterNumRatingsMap(ArrayList<PlainRater> raters) {
+  private HashMap<String, Integer> buildRaterNumRatingsMap(
+      ArrayList<EfficientRater> raters) {
     HashMap<String, Integer> raterNumRatingsMap = new HashMap<String, Integer>();
-    for (PlainRater rater : raters) {
+    for (EfficientRater rater : raters) {
       raterNumRatingsMap.put(rater.getID(), rater.numRatings());
     }
     return raterNumRatingsMap;
   }
 
-  private int countNumRatingsOfMovie(ArrayList<PlainRater> raters, String movieId) {
+  private int countNumRatingsOfMovie(ArrayList<EfficientRater> raters, String movieId) {
     int count = 0;
-    for (PlainRater rater : raters) {
+    for (EfficientRater rater : raters) {
       if (rater.getItemsRated().contains(movieId)) {
         count++;
       }
@@ -160,9 +161,9 @@ public class FirstRatings {
     return count;
   }
 
-  private int countUniqueMovies(ArrayList<PlainRater> raters) {
+  private int countUniqueMovies(ArrayList<EfficientRater> raters) {
     HashSet<String> uniqueMovies = new HashSet<String>();
-    for (PlainRater rater : raters) {
+    for (EfficientRater rater : raters) {
       uniqueMovies.addAll(rater.getItemsRated());
     }
     return uniqueMovies.size();
@@ -172,7 +173,7 @@ public class FirstRatings {
     String filename = "ratings.csv";
     System.out.println("filename = " + filename);
 
-    ArrayList<PlainRater> raters = loadRaters(filename);
+    ArrayList<EfficientRater> raters = loadRaters(filename);
     System.out.println("Number of raters: " + raters.size());
 
     HashMap<String, Integer> raterNumRatingsMap = buildRaterNumRatingsMap(raters);
