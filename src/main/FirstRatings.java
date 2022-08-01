@@ -176,7 +176,7 @@ public class FirstRatings {
     System.out.println("Number of raters: " + raters.size());
 
     HashMap<String, Integer> raterNumRatingsMap = buildRaterNumRatingsMap(raters);
-    String raterId = "2";
+    String raterId = "193";
     System.out.println("# ratings for rater with ID " + raterId + ": "
         + raterNumRatingsMap.get(raterId));
 
