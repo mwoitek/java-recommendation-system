@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import org.apache.commons.csv.CSVRecord;
 import edu.duke.FileResource;
 
@@ -19,7 +20,6 @@ public class FirstRatings {
     String country;
     String poster;
     int minutes;
-    Movie movie;
 
     for (CSVRecord record : fr.getCSVParser()) {
       id = record.get("id");
@@ -30,8 +30,7 @@ public class FirstRatings {
       country = record.get("country");
       poster = record.get("poster");
       minutes = Integer.parseInt(record.get("minutes"));
-      movie = new Movie(id, title, year, genres, director, country, poster, minutes);
-      movies.add(movie);
+      movies.add(new Movie(id, title, year, genres, director, country, poster, minutes));
     }
 
     return movies;
@@ -95,24 +94,18 @@ public class FirstRatings {
 
   public void testLoadMovies() {
     String filename = "ratedmoviesfull.csv";
+    System.out.println("filename = " + filename);
+
     ArrayList<Movie> movies = loadMovies(filename);
+    System.out.println("Number of movies: " + movies.size());
+    System.out
+        .println("# movies that have 'Comedy' as a genre: " + countComedyMovies(movies));
+    System.out.println("# movies that are longer than 150 minutes: "
+        + countMoviesLongerThan150Min(movies));
+
     HashMap<String, Integer> directorCountMap = buildDirectorCountMap(movies);
     Integer maxNumMovies = getMaximumValueInMap(directorCountMap);
     ArrayList<String> directors = getKeysWithMaxValue(directorCountMap, maxNumMovies);
-
-    System.out.println("filename = " + filename);
-    System.out.println("Number of movies: " + movies.size());
-
-    // System.out.println("Movies:");
-    // for (Movie movie : movies) {
-    // System.out.println(movie);
-    // }
-
-    System.out
-        .println("Movies that have 'Comedy' as a genre: " + countComedyMovies(movies));
-    System.out.println("Movies that are longer than 150 minutes: "
-        + countMoviesLongerThan150Min(movies));
-
     System.out.println("Maximum number of movies by any director: " + maxNumMovies);
     System.out.println("Directors that directed that many movies:");
     for (String director : directors) {
@@ -157,31 +150,50 @@ public class FirstRatings {
     return raterNumRatingsMap;
   }
 
-  public void testLoadRaters() {
-    String filename = "ratings_short.csv";
-    ArrayList<Rater> raters = loadRaters(filename);
-    HashMap<String, Integer> raterNumRatingsMap = buildRaterNumRatingsMap(raters);
-    Integer maxNumRatings = getMaximumValueInMap(raterNumRatingsMap);
-    ArrayList<String> raterIds = getKeysWithMaxValue(raterNumRatingsMap, maxNumRatings);
+  private int countNumRatingsOfMovie(ArrayList<Rater> raters, String movieId) {
+    int count = 0;
+    for (Rater rater : raters) {
+      if (rater.getItemsRated().contains(movieId)) {
+        count++;
+      }
+    }
+    return count;
+  }
 
+  private int countUniqueMovies(ArrayList<Rater> raters) {
+    HashSet<String> uniqueMovies = new HashSet<String>();
+    for (Rater rater : raters) {
+      uniqueMovies.addAll(rater.getItemsRated());
+    }
+    return uniqueMovies.size();
+  }
+
+  public void testLoadRaters() {
+    String filename = "ratings.csv";
     System.out.println("filename = " + filename);
+
+    ArrayList<Rater> raters = loadRaters(filename);
     System.out.println("Number of raters: " + raters.size());
 
-    // System.out.println("Raters:");
-    // for (String id : raterNumRatingsMap.keySet()) {
-    // System.out.println("ID: " + id + ", # ratings: " + raterNumRatingsMap.get(id));
-    // }
-
+    HashMap<String, Integer> raterNumRatingsMap = buildRaterNumRatingsMap(raters);
     String raterId = "2";
     System.out.println("# ratings for rater with ID " + raterId + ": "
         + raterNumRatingsMap.get(raterId));
 
+    Integer maxNumRatings = getMaximumValueInMap(raterNumRatingsMap);
+    ArrayList<String> raterIds = getKeysWithMaxValue(raterNumRatingsMap, maxNumRatings);
     System.out.println("Maximum number of ratings by any rater: " + maxNumRatings);
     System.out.println("Raters that have the maximum number of ratings:");
     for (String id : raterIds) {
       System.out.println(id);
     }
     System.out.println("Number of such raters: " + raterIds.size());
+
+    String movieId = "1798709";
+    System.out.println("Movie ID: " + movieId + ", # ratings: "
+        + countNumRatingsOfMovie(raters, movieId));
+    System.out
+        .println("# different movies that have been rated: " + countUniqueMovies(raters));
   }
 
   public static void main(String[] args) {
