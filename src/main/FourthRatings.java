@@ -4,26 +4,11 @@ import java.util.ArrayList;
 
 public class FourthRatings {
 
-  private ArrayList<EfficientRater> myRaters;
-
-  public FourthRatings(String ratingsfile) {
-    FirstRatings fr = new FirstRatings();
-    myRaters = fr.loadRaters(ratingsfile);
-  }
-
-  public FourthRatings() {
-    this("data/ratings.csv");
-  }
-
-  public int getRaterSize() {
-    return myRaters.size();
-  }
-
   private double getAverageByID(String id, int minimalRaters) {
     double sum = 0.0;
     int count = 0;
     double rating;
-    for (EfficientRater rater : myRaters) {
+    for (Rater rater : RaterDatabase.getRaters()) {
       if ((rating = rater.getRating(id)) < 0.0) {
         continue;
       }
