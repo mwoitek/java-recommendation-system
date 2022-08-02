@@ -74,13 +74,47 @@ public class MovieRunnerWithFilters {
     }
   }
 
+  public void printAverageRatingsByMinutes() {
+    ThirdRatings tr = new ThirdRatings("data/ratings_short.csv");
+    System.out.println("read data for " + tr.getRaterSize() + " raters");
+
+    MovieDatabase.initialize("ratedmovies_short.csv");
+    System.out.println("read data for " + MovieDatabase.size() + " movies");
+
+    int minimalRaters = 1;
+    int minMinutes = 110;
+    int maxMinutes = 170;
+    MinutesFilter filter = new MinutesFilter(minMinutes, maxMinutes);
+    ArrayList<Rating> averageRatings =
+        tr.getAverageRatingsByFilter(minimalRaters, filter);
+    Collections.sort(averageRatings);
+    System.out.println("found " + averageRatings.size() + " movies");
+
+    String movieId;
+    int movieMinutes;
+    String movieTitle;
+    for (Rating averageRating : averageRatings) {
+      movieId = averageRating.getItem();
+      movieMinutes = MovieDatabase.getMinutes(movieId);
+      movieTitle = MovieDatabase.getTitle(movieId);
+      System.out.println(
+          averageRating.getValue() + " Time: " + movieMinutes + " " + movieTitle);
+    }
+  }
+
   public static void main(String[] args) {
     MovieRunnerWithFilters runner = new MovieRunnerWithFilters();
+
     runner.printAverageRatings();
     System.out.println();
+
     runner.printAverageRatingsByYear();
     System.out.println();
+
     runner.printAverageRatingsByGenre();
+    System.out.println();
+
+    runner.printAverageRatingsByMinutes();
   }
 
 }
