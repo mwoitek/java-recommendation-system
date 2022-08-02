@@ -4,21 +4,15 @@ import java.util.ArrayList;
 
 public class ThirdRatings {
 
-  private ArrayList<Movie> myMovies;
   private ArrayList<EfficientRater> myRaters;
 
-  public ThirdRatings(String moviefile, String ratingsfile) {
+  public ThirdRatings(String ratingsfile) {
     FirstRatings fr = new FirstRatings();
-    myMovies = fr.loadMovies(moviefile);
     myRaters = fr.loadRaters(ratingsfile);
   }
 
   public ThirdRatings() {
-    this("data/ratedmoviesfull.csv", "data/ratings.csv");
-  }
-
-  public int getMovieSize() {
-    return myMovies.size();
+    this("data/ratings.csv");
   }
 
   public int getRaterSize() {
@@ -44,38 +38,14 @@ public class ThirdRatings {
 
   public ArrayList<Rating> getAverageRatings(int minimalRaters) {
     ArrayList<Rating> averageRatings = new ArrayList<Rating>();
-    String movieId;
+    ArrayList<String> movieIds = MovieDatabase.filterBy(new TrueFilter());
     double averageRating;
-    for (Movie movie : myMovies) {
-      movieId = movie.getID();
-      averageRating = getAverageByID(movieId, minimalRaters);
-      if (averageRating > 0.0) {
+    for (String movieId : movieIds) {
+      if ((averageRating = getAverageByID(movieId, minimalRaters)) > 0.0) {
         averageRatings.add(new Rating(movieId, averageRating));
       }
     }
     return averageRatings;
-  }
-
-  public String getTitle(String id) {
-    int i = 0;
-    while (i < myMovies.size() && !myMovies.get(i).getID().equals(id)) {
-      i++;
-    }
-    if (i == myMovies.size()) {
-      return "MOVIE ID NOT FOUND";
-    }
-    return myMovies.get(i).getTitle();
-  }
-
-  public String getID(String title) {
-    int i = 0;
-    while (i < myMovies.size() && !myMovies.get(i).getTitle().equals(title)) {
-      i++;
-    }
-    if (i == myMovies.size()) {
-      return "NO SUCH TITLE";
-    }
-    return myMovies.get(i).getID();
   }
 
 }
