@@ -24,9 +24,63 @@ public class MovieRunnerWithFilters {
     }
   }
 
+  public void printAverageRatingsByYear() {
+    ThirdRatings tr = new ThirdRatings("data/ratings_short.csv");
+    System.out.println("read data for " + tr.getRaterSize() + " raters");
+
+    MovieDatabase.initialize("ratedmovies_short.csv");
+    System.out.println("read data for " + MovieDatabase.size() + " movies");
+
+    int minimalRaters = 1;
+    int year = 2000;
+    YearAfterFilter filter = new YearAfterFilter(year);
+    ArrayList<Rating> averageRatings =
+        tr.getAverageRatingsByFilter(minimalRaters, filter);
+    Collections.sort(averageRatings);
+    System.out.println("found " + averageRatings.size() + " movies");
+
+    String movieId;
+    int movieYear;
+    String movieTitle;
+    for (Rating averageRating : averageRatings) {
+      movieId = averageRating.getItem();
+      movieYear = MovieDatabase.getYear(movieId);
+      movieTitle = MovieDatabase.getTitle(movieId);
+      System.out.println(averageRating.getValue() + " " + movieYear + " " + movieTitle);
+    }
+  }
+
+  public void printAverageRatingsByGenre() {
+    ThirdRatings tr = new ThirdRatings("data/ratings_short.csv");
+    System.out.println("read data for " + tr.getRaterSize() + " raters");
+
+    MovieDatabase.initialize("ratedmovies_short.csv");
+    System.out.println("read data for " + MovieDatabase.size() + " movies");
+
+    int minimalRaters = 1;
+    String genre = "Crime";
+    GenreFilter filter = new GenreFilter(genre);
+    ArrayList<Rating> averageRatings =
+        tr.getAverageRatingsByFilter(minimalRaters, filter);
+    Collections.sort(averageRatings);
+    System.out.println("found " + averageRatings.size() + " movies");
+
+    String movieId;
+    for (Rating averageRating : averageRatings) {
+      movieId = averageRating.getItem();
+      System.out
+          .println(averageRating.getValue() + " " + MovieDatabase.getTitle(movieId));
+      System.out.println("    " + MovieDatabase.getGenres(movieId));
+    }
+  }
+
   public static void main(String[] args) {
     MovieRunnerWithFilters runner = new MovieRunnerWithFilters();
     runner.printAverageRatings();
+    System.out.println();
+    runner.printAverageRatingsByYear();
+    System.out.println();
+    runner.printAverageRatingsByGenre();
   }
 
 }
