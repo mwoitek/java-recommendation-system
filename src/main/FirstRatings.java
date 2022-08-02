@@ -10,7 +10,7 @@ public class FirstRatings {
 
   public ArrayList<Movie> loadMovies(String filename) {
     ArrayList<Movie> movies = new ArrayList<Movie>();
-    FileResource fr = new FileResource("data/" + filename);
+    FileResource fr = new FileResource(filename);
 
     String id;
     String title;
@@ -93,7 +93,7 @@ public class FirstRatings {
   }
 
   public void testLoadMovies() {
-    String filename = "ratedmoviesfull.csv";
+    String filename = "data/ratedmoviesfull.csv";
     System.out.println("filename = " + filename);
 
     ArrayList<Movie> movies = loadMovies(filename);
@@ -116,7 +116,7 @@ public class FirstRatings {
 
   public ArrayList<EfficientRater> loadRaters(String filename) {
     ArrayList<EfficientRater> raters = new ArrayList<EfficientRater>();
-    FileResource fr = new FileResource("data/" + filename);
+    FileResource fr = new FileResource(filename);
 
     String prevRaterId = "";
     String currRaterId;
@@ -170,7 +170,7 @@ public class FirstRatings {
   }
 
   public void testLoadRaters() {
-    String filename = "ratings.csv";
+    String filename = "data/ratings.csv";
     System.out.println("filename = " + filename);
 
     ArrayList<EfficientRater> raters = loadRaters(filename);

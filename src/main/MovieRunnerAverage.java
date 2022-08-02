@@ -6,7 +6,7 @@ import java.util.Collections;
 public class MovieRunnerAverage {
 
   public void printAverageRatings() {
-    SecondRatings sr = new SecondRatings("ratedmoviesfull.csv", "ratings.csv");
+    SecondRatings sr = new SecondRatings();
     System.out.println("Number of movies: " + sr.getMovieSize());
     System.out.println("Number of raters: " + sr.getRaterSize());
 
@@ -22,7 +22,7 @@ public class MovieRunnerAverage {
   }
 
   public void getAverageRatingOneMovie() {
-    SecondRatings sr = new SecondRatings("ratedmoviesfull.csv", "ratings.csv");
+    SecondRatings sr = new SecondRatings();
 
     String movieTitle = "Vacation";
     String movieId = sr.getID(movieTitle);

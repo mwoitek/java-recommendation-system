@@ -14,7 +14,7 @@ public class SecondRatings {
   }
 
   public SecondRatings() {
-    this("ratedmoviesfull.csv", "ratings.csv");
+    this("data/ratedmoviesfull.csv", "data/ratings.csv");
   }
 
   public int getMovieSize() {
