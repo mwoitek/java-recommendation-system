@@ -57,6 +57,29 @@ public class MovieRunnerSimilarRatings {
     }
   }
 
+  public void printSimilarRatings() {
+    FourthRatings fr = new FourthRatings();
+    MovieDatabase.initialize("ratedmoviesfull.csv");
+    RaterDatabase.initialize("ratings.csv");
+
+    String id = "65";
+    int numSimilarRaters = 20;
+    int minimalRaters = 5;
+    ArrayList<Rating> similarRatings =
+        fr.getSimilarRatings(id, numSimilarRaters, minimalRaters);
+
+    Rating similarRating;
+    for (int i = 0; i < 15; i++) {
+      try {
+        similarRating = similarRatings.get(i);
+      } catch (Exception e) {
+        break;
+      }
+      System.out.println((i + 1) + " " + similarRating.getValue() + " "
+          + MovieDatabase.getTitle(similarRating.getItem()));
+    }
+  }
+
   public static void main(String[] args) {
     MovieRunnerSimilarRatings runner = new MovieRunnerSimilarRatings();
 
@@ -64,6 +87,9 @@ public class MovieRunnerSimilarRatings {
     System.out.println();
 
     runner.printAverageRatingsByYearAfterAndGenre();
+    System.out.println();
+
+    runner.printSimilarRatings();
   }
 
 }
