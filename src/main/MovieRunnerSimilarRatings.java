@@ -57,25 +57,6 @@ public class MovieRunnerSimilarRatings {
     }
   }
 
-  private void printListOfRatings(ArrayList<Rating> similarRatings, int numRows) {
-    Rating similarRating;
-    String col1;
-    String col2;
-    String col3;
-    if (numRows > similarRatings.size()) {
-      numRows = similarRatings.size();
-    }
-    System.out.println("Rank\tWeighted Average\tTitle\n");
-    for (int i = 0; i < numRows; i++) {
-      similarRating = similarRatings.get(i);
-      col1 = String.format("%-4s", i + 1);
-      col2 = String.format("%.4f", similarRating.getValue());
-      col2 = String.format("%-16s", col2);
-      col3 = MovieDatabase.getTitle(similarRating.getItem());
-      System.out.println(col1 + "\t" + col2 + "\t" + col3);
-    }
-  }
-
   public void printSimilarRatings() {
     FourthRatings fr = new FourthRatings();
     MovieDatabase.initialize("ratedmoviesfull.csv");
@@ -87,7 +68,120 @@ public class MovieRunnerSimilarRatings {
 
     ArrayList<Rating> similarRatings =
         fr.getSimilarRatings(id, numSimilarRaters, minimalRaters);
-    printListOfRatings(similarRatings, 15);
+
+    int numRows = 15;
+    Rating similarRating;
+    String col1;
+    String col2;
+    String col3;
+
+    if (numRows > similarRatings.size()) {
+      numRows = similarRatings.size();
+    }
+
+    System.out.println("Rank\tWeighted Average\tTitle\n");
+    for (int i = 0; i < numRows; i++) {
+      similarRating = similarRatings.get(i);
+      col1 = String.format("%-4s", i + 1);
+      col2 = String.format("%.4f", similarRating.getValue());
+      col2 = String.format("%-16s", col2);
+      col3 = MovieDatabase.getTitle(similarRating.getItem());
+      System.out.println(col1 + "\t" + col2 + "\t" + col3);
+    }
+  }
+
+  public void printSimilarRatingsByGenre() {
+    FourthRatings fr = new FourthRatings();
+    MovieDatabase.initialize("ratedmoviesfull.csv");
+    RaterDatabase.initialize("ratings.csv");
+
+    String id = "65";
+    int numSimilarRaters = 20;
+    int minimalRaters = 5;
+
+    String genre = "Action";
+    GenreFilter filter = new GenreFilter(genre);
+
+    ArrayList<Rating> similarRatings =
+        fr.getSimilarRatingsByFilter(id, numSimilarRaters, minimalRaters, filter);
+
+    int numRows = 15;
+    int titleColLength = 40;
+    String titleColFormat = "%-" + titleColLength + "s";
+    Rating similarRating;
+    String movieId;
+    String col1;
+    String col2;
+    String col3;
+    String col4;
+
+    if (numRows > similarRatings.size()) {
+      numRows = similarRatings.size();
+    }
+
+    System.out.println("Rank\tWeighted Average\t" + String.format(titleColFormat, "Title")
+        + "\tGenres\n");
+    for (int i = 0; i < numRows; i++) {
+      similarRating = similarRatings.get(i);
+      movieId = similarRating.getItem();
+      col1 = String.format("%-4s", i + 1);
+      col2 = String.format("%.4f", similarRating.getValue());
+      col2 = String.format("%-16s", col2);
+      col3 = MovieDatabase.getTitle(movieId);
+      if (col3.length() > titleColLength) {
+        col3 = col3.substring(0, titleColLength - 3) + "...";
+      }
+      col3 = String.format(titleColFormat, col3);
+      col4 = MovieDatabase.getGenres(movieId);
+      System.out.println(col1 + "\t" + col2 + "\t" + col3 + "\t" + col4);
+    }
+  }
+
+  public void printSimilarRatingsByDirector() {
+    FourthRatings fr = new FourthRatings();
+    MovieDatabase.initialize("ratedmoviesfull.csv");
+    RaterDatabase.initialize("ratings.csv");
+
+    String id = "1034";
+    int numSimilarRaters = 10;
+    int minimalRaters = 3;
+
+    String directors = "Clint Eastwood,Sydney Pollack,David Cronenberg,Oliver Stone";
+    DirectorsFilter filter = new DirectorsFilter(directors);
+
+    ArrayList<Rating> similarRatings =
+        fr.getSimilarRatingsByFilter(id, numSimilarRaters, minimalRaters, filter);
+
+    int numRows = 15;
+    int titleColLength = 40;
+    String titleColFormat = "%-" + titleColLength + "s";
+    Rating similarRating;
+    String movieId;
+    String col1;
+    String col2;
+    String col3;
+    String col4;
+
+    if (numRows > similarRatings.size()) {
+      numRows = similarRatings.size();
+    }
+
+    System.out.println("Rank\tWeighted Average\t" + String.format(titleColFormat, "Title")
+        + "\tDirectors\n");
+    for (int i = 0; i < numRows; i++) {
+      similarRating = similarRatings.get(i);
+      movieId = similarRating.getItem();
+      col1 = String.format("%-4s", i + 1);
+      col2 = String.format("%.4f", similarRating.getValue());
+      col2 = String.format("%-16s", col2);
+      col3 = MovieDatabase.getTitle(movieId);
+      if (col3.length() > titleColLength) {
+        col3 = col3.substring(0, titleColLength - 3) + "...";
+      }
+      col3 = String.format(titleColFormat, col3);
+      col4 = MovieDatabase.getDirector(movieId);
+      System.out.println(col1 + "\t" + col2 + "\t" + col3 + "\t" + col4);
+    }
   }
 
   public static void main(String[] args) {
@@ -100,6 +194,12 @@ public class MovieRunnerSimilarRatings {
     // System.out.println();
 
     runner.printSimilarRatings();
+    System.out.println();
+
+    runner.printSimilarRatingsByGenre();
+    System.out.println();
+
+    runner.printSimilarRatingsByDirector();
   }
 
 }
