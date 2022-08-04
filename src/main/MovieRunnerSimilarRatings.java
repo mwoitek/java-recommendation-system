@@ -62,7 +62,7 @@ public class MovieRunnerSimilarRatings {
     MovieDatabase.initialize("ratedmoviesfull.csv");
     RaterDatabase.initialize("ratings.csv");
 
-    String id = "65";
+    String id = "71";
     int numSimilarRaters = 20;
     int minimalRaters = 5;
 
@@ -95,11 +95,11 @@ public class MovieRunnerSimilarRatings {
     MovieDatabase.initialize("ratedmoviesfull.csv");
     RaterDatabase.initialize("ratings.csv");
 
-    String id = "65";
+    String id = "964";
     int numSimilarRaters = 20;
     int minimalRaters = 5;
 
-    String genre = "Action";
+    String genre = "Mystery";
     GenreFilter filter = new GenreFilter(genre);
 
     ArrayList<Rating> similarRatings =
@@ -142,11 +142,12 @@ public class MovieRunnerSimilarRatings {
     MovieDatabase.initialize("ratedmoviesfull.csv");
     RaterDatabase.initialize("ratings.csv");
 
-    String id = "1034";
+    String id = "120";
     int numSimilarRaters = 10;
-    int minimalRaters = 3;
+    int minimalRaters = 2;
 
-    String directors = "Clint Eastwood,Sydney Pollack,David Cronenberg,Oliver Stone";
+    String directors =
+        "Clint Eastwood,J.J. Abrams,Alfred Hitchcock,Sydney Pollack,David Cronenberg,Oliver Stone,Mike Leigh";
     DirectorsFilter filter = new DirectorsFilter(directors);
 
     ArrayList<Rating> similarRatings =
@@ -189,13 +190,13 @@ public class MovieRunnerSimilarRatings {
     MovieDatabase.initialize("ratedmoviesfull.csv");
     RaterDatabase.initialize("ratings.csv");
 
-    String id = "65";
+    String id = "168";
     int numSimilarRaters = 10;
-    int minimalRaters = 5;
+    int minimalRaters = 3;
 
-    int minMinutes = 100;
-    int maxMinutes = 200;
-    String genre = "Adventure";
+    int minMinutes = 80;
+    int maxMinutes = 160;
+    String genre = "Drama";
     AllFilters filter = new AllFilters();
     filter.addFilter(new MinutesFilter(minMinutes, maxMinutes));
     filter.addFilter(new GenreFilter(genre));
@@ -242,13 +243,13 @@ public class MovieRunnerSimilarRatings {
     MovieDatabase.initialize("ratedmoviesfull.csv");
     RaterDatabase.initialize("ratings.csv");
 
-    String id = "65";
+    String id = "314";
     int numSimilarRaters = 10;
     int minimalRaters = 5;
 
-    int minMinutes = 80;
-    int maxMinutes = 100;
-    int year = 2000;
+    int minMinutes = 70;
+    int maxMinutes = 200;
+    int year = 1975;
     AllFilters filter = new AllFilters();
     filter.addFilter(new MinutesFilter(minMinutes, maxMinutes));
     filter.addFilter(new YearAfterFilter(year));
