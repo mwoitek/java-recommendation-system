@@ -184,6 +184,112 @@ public class MovieRunnerSimilarRatings {
     }
   }
 
+  public void printSimilarRatingsByGenreAndMinutes() {
+    FourthRatings fr = new FourthRatings();
+    MovieDatabase.initialize("ratedmoviesfull.csv");
+    RaterDatabase.initialize("ratings.csv");
+
+    String id = "65";
+    int numSimilarRaters = 10;
+    int minimalRaters = 5;
+
+    int minMinutes = 100;
+    int maxMinutes = 200;
+    String genre = "Adventure";
+    AllFilters filter = new AllFilters();
+    filter.addFilter(new MinutesFilter(minMinutes, maxMinutes));
+    filter.addFilter(new GenreFilter(genre));
+
+    ArrayList<Rating> similarRatings =
+        fr.getSimilarRatingsByFilter(id, numSimilarRaters, minimalRaters, filter);
+
+    int numRows = 15;
+    int titleColLength = 40;
+    String titleColFormat = "%-" + titleColLength + "s";
+    Rating similarRating;
+    String movieId;
+    String col1;
+    String col2;
+    String col3;
+    String col4;
+    String col5;
+
+    if (numRows > similarRatings.size()) {
+      numRows = similarRatings.size();
+    }
+
+    System.out.println("Rank\tWeighted Average\t" + String.format(titleColFormat, "Title")
+        + "\tMinutes\t\tGenres\n");
+    for (int i = 0; i < numRows; i++) {
+      similarRating = similarRatings.get(i);
+      movieId = similarRating.getItem();
+      col1 = String.format("%-4s", i + 1);
+      col2 = String.format("%.4f", similarRating.getValue());
+      col2 = String.format("%-16s", col2);
+      col3 = MovieDatabase.getTitle(movieId);
+      if (col3.length() > titleColLength) {
+        col3 = col3.substring(0, titleColLength - 3) + "...";
+      }
+      col3 = String.format(titleColFormat, col3);
+      col4 = String.format("%-7s", MovieDatabase.getMinutes(movieId));
+      col5 = MovieDatabase.getGenres(movieId);
+      System.out.println(col1 + "\t" + col2 + "\t" + col3 + "\t" + col4 + "\t\t" + col5);
+    }
+  }
+
+  public void printSimilarRatingsByYearAfterAndMinutes() {
+    FourthRatings fr = new FourthRatings();
+    MovieDatabase.initialize("ratedmoviesfull.csv");
+    RaterDatabase.initialize("ratings.csv");
+
+    String id = "65";
+    int numSimilarRaters = 10;
+    int minimalRaters = 5;
+
+    int minMinutes = 80;
+    int maxMinutes = 100;
+    int year = 2000;
+    AllFilters filter = new AllFilters();
+    filter.addFilter(new MinutesFilter(minMinutes, maxMinutes));
+    filter.addFilter(new YearAfterFilter(year));
+
+    ArrayList<Rating> similarRatings =
+        fr.getSimilarRatingsByFilter(id, numSimilarRaters, minimalRaters, filter);
+
+    int numRows = 15;
+    int titleColLength = 40;
+    String titleColFormat = "%-" + titleColLength + "s";
+    Rating similarRating;
+    String movieId;
+    String col1;
+    String col2;
+    String col3;
+    String col4;
+    String col5;
+
+    if (numRows > similarRatings.size()) {
+      numRows = similarRatings.size();
+    }
+
+    System.out.println("Rank\tWeighted Average\t" + String.format(titleColFormat, "Title")
+        + "\tMinutes\t\tYear\n");
+    for (int i = 0; i < numRows; i++) {
+      similarRating = similarRatings.get(i);
+      movieId = similarRating.getItem();
+      col1 = String.format("%-4s", i + 1);
+      col2 = String.format("%.4f", similarRating.getValue());
+      col2 = String.format("%-16s", col2);
+      col3 = MovieDatabase.getTitle(movieId);
+      if (col3.length() > titleColLength) {
+        col3 = col3.substring(0, titleColLength - 3) + "...";
+      }
+      col3 = String.format(titleColFormat, col3);
+      col4 = String.format("%-7s", MovieDatabase.getMinutes(movieId));
+      col5 = String.format("%-4s", MovieDatabase.getYear(movieId));
+      System.out.println(col1 + "\t" + col2 + "\t" + col3 + "\t" + col4 + "\t\t" + col5);
+    }
+  }
+
   public static void main(String[] args) {
     MovieRunnerSimilarRatings runner = new MovieRunnerSimilarRatings();
 
@@ -200,6 +306,12 @@ public class MovieRunnerSimilarRatings {
     System.out.println();
 
     runner.printSimilarRatingsByDirector();
+    System.out.println();
+
+    runner.printSimilarRatingsByGenreAndMinutes();
+    System.out.println();
+
+    runner.printSimilarRatingsByYearAfterAndMinutes();
   }
 
 }
