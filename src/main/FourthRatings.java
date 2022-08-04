@@ -63,17 +63,18 @@ public class FourthRatings {
   }
 
   private ArrayList<Rating> getSimilarities(String id) {
-    ArrayList<Rating> list = new ArrayList<Rating>();
+    ArrayList<Rating> similarities = new ArrayList<Rating>();
     Rater me = RaterDatabase.getRater(id);
     String raterId;
+    double product;
     for (Rater r : RaterDatabase.getRaters()) {
       raterId = r.getID();
-      if (!raterId.equals(id)) {
-        list.add(new Rating(raterId, dotProduct(me, r)));
+      if (!raterId.equals(id) && (product = dotProduct(me, r)) > 0.0) {
+        similarities.add(new Rating(raterId, product));
       }
     }
-    Collections.sort(list, Collections.reverseOrder());
-    return list;
+    Collections.sort(similarities, Collections.reverseOrder());
+    return similarities;
   }
 
   private double getWeightedAverage(String movieId, List<Rating> similarities,
@@ -81,11 +82,11 @@ public class FourthRatings {
     double sum = 0.0;
     int count = 0;
     double rating;
-    for (Rating r : similarities) {
-      if ((rating = RaterDatabase.getRater(r.getItem()).getRating(movieId)) < 0.0) {
+    for (Rating rat : similarities) {
+      if ((rating = RaterDatabase.getRater(rat.getItem()).getRating(movieId)) < 0.0) {
         continue;
       }
-      sum += r.getValue() * rating;
+      sum += rat.getValue() * rating;
       count++;
     }
     if (count >= minimalRaters) {
@@ -96,7 +97,7 @@ public class FourthRatings {
 
   public ArrayList<Rating> getSimilarRatings(String id, int numSimilarRaters,
       int minimalRaters) {
-    ArrayList<Rating> list = new ArrayList<Rating>();
+    ArrayList<Rating> similarRatings = new ArrayList<Rating>();
 
     List<Rating> similarities = getSimilarities(id);
     if (numSimilarRaters < similarities.size()) {
@@ -108,12 +109,34 @@ public class FourthRatings {
     for (String movieId : movieIds) {
       weightedAverage = getWeightedAverage(movieId, similarities, minimalRaters);
       if (weightedAverage > 0.0) {
-        list.add(new Rating(movieId, weightedAverage));
+        similarRatings.add(new Rating(movieId, weightedAverage));
       }
     }
 
-    Collections.sort(list, Collections.reverseOrder());
-    return list;
+    Collections.sort(similarRatings, Collections.reverseOrder());
+    return similarRatings;
+  }
+
+  public ArrayList<Rating> getSimilarRatingsByFilter(String id, int numSimilarRaters,
+      int minimalRaters, Filter filterCriteria) {
+    ArrayList<Rating> similarRatings = new ArrayList<Rating>();
+
+    List<Rating> similarities = getSimilarities(id);
+    if (numSimilarRaters < similarities.size()) {
+      similarities = similarities.subList(0, numSimilarRaters);
+    }
+
+    ArrayList<String> movieIds = MovieDatabase.filterBy(filterCriteria);
+    double weightedAverage;
+    for (String movieId : movieIds) {
+      weightedAverage = getWeightedAverage(movieId, similarities, minimalRaters);
+      if (weightedAverage > 0.0) {
+        similarRatings.add(new Rating(movieId, weightedAverage));
+      }
+    }
+
+    Collections.sort(similarRatings, Collections.reverseOrder());
+    return similarRatings;
   }
 
 }
